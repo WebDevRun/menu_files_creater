@@ -14,14 +14,16 @@ class DateInfo(NamedTuple):
 
 
 class DateGenerator:
-    weekend = (5, 6)
+    weekend = {"6": [6], "5": [5, 6]}
 
     def __init__(
         self,
         first_education_date: datetime,
         start_date: datetime,
         end_date: datetime,
+        education_day_count: str = "5",
     ) -> None:
+        self.education_day_count = education_day_count
         self.first_education_date = first_education_date
         self.start_date = start_date
         self.end_date = end_date
@@ -35,7 +37,7 @@ class DateGenerator:
         day_number = int(date.strftime("%w"))
 
         if index >= 2:
-            return day_number + 5
+            return day_number + self.weekend[self.education_day_count][0]
 
         return day_number
 
@@ -57,7 +59,7 @@ class DateGenerator:
         return 2
 
     def __is_weekday(self, date: datetime):
-        return date.weekday() not in self.weekend
+        return date.weekday() not in self.weekend[self.education_day_count]
 
     def generate_date_range(self) -> DateInfo:
         days = (self.end_date - self.start_date).days
