@@ -4,7 +4,7 @@ from src.date_generator import DateGenerator
 from src.openpyxl_worker import OpenpyxlWorker
 
 
-if __name__ == "__main__":
+def main():
     config_path = Path("dates.ini").absolute()
     config_dates = IniReader(config_path).get_dates()
     generated_dir_name = f"{config_dates.start_date}-{config_dates.end_date}"
@@ -29,3 +29,7 @@ if __name__ == "__main__":
     ]
     save_dir = Path(generated_dir_name)
     OpenpyxlWorker(date_info.dates, template_files, save_dir).generate_files()
+
+
+if __name__ == "__main__":
+    main()
