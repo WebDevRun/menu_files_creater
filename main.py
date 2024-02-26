@@ -3,9 +3,12 @@ from src.ini_reader import IniReader
 from src.date_generator import DateGenerator
 from src.openpyxl_worker import OpenpyxlWorker
 
+options_ini = "options.ini"
+templates_folder = "templates"
+
 
 def main():
-    config_path = Path("dates.ini").absolute()
+    config_path = Path(options_ini).absolute()
     config_dates = IniReader(config_path).get_dates()
     generated_dir_name = f"{config_dates.start_date}-{config_dates.end_date}"
     dates = DateGenerator.generate_from_string(
@@ -21,7 +24,7 @@ def main():
     )
     date_info = dateGenerator.generate_date_range()
     template_files = [
-        Path("templates", f"{number}.xlsx").absolute()
+        Path(templates_folder, f"{number}.xlsx").absolute()
         for number in date_info.date_indexes
     ]
     save_dir = Path(generated_dir_name)
