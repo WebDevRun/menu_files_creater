@@ -16,16 +16,15 @@ def main():
         config_dates.start_date,
         config_dates.end_date,
     )
-    dateGenerator = DateGenerator(
+    date_info = DateGenerator(
         dates.first_education_date,
         dates.start_date,
         dates.end_date,
         config_dates.education_day_count,
-    )
-    date_info = dateGenerator.generate_date_range()
+    ).generate_date_range()
     template_files = [
-        Path(templates_folder, f"{number}.xlsx").absolute()
-        for number in date_info.date_indexes
+        Path(templates_folder, f"{index}.xlsx").absolute()
+        for index in date_info.date_indexes
     ]
     save_dir = Path(generated_dir_name)
     save_dir.mkdir(exist_ok=True)
