@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import NamedTuple
+from os import remove as os_remove
 from openpyxl import Workbook, load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -11,6 +12,7 @@ class FileWorkers(NamedTuple):
 
 
 class OpenpyxlWorker:
+    xlsx_format = ".xlsx"
     workbook_name = "1"
     date_row = 1
     date_column = 10
@@ -30,14 +32,26 @@ class OpenpyxlWorker:
     def __write_date(self, worksheet: Worksheet, date: str):
         worksheet.cell(self.date_row, self.date_column, date)
 
-    def save(self, workbook: Workbook, name: Path):
+    def __save(self, workbook: Workbook, name: Path):
         workbook.save(name)
 
+    def __remove_files(self, saved_paths: list[Path]):
+        saved_files = tuple(Path(self.save_dir).glob(f"*{self.xlsx_format}"))
+        files_to_remove = [file for file in saved_files if file not in saved_paths]
+
+        for file in files_to_remove:
+            os_remove(file)
+
     def generate_files(self):
+        saved_paths = []
+
         for index, date in enumerate(self.dates):
             str_date = date.strftime("%d.%m.%Y")
-            save_path = Path(self.save_dir, f"{str_date}.xlsx")
+            save_path = Path(self.save_dir, f"{str_date}{self.xlsx_format}")
 
             file_workers = self.__read_file(self.path_list[index])
             self.__write_date(file_workers.worksheet, str_date)
-            self.save(file_workers.workbook, save_path)
+            self.__save(file_workers.workbook, save_path)
+            saved_paths.append(save_path)
+
+        self.__remove_files(saved_paths)
