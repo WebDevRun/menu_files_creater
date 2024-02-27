@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, List
 from os import remove as os_remove
 from openpyxl import Workbook, load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
@@ -18,7 +18,7 @@ class OpenpyxlWorker:
     date_column = 10
 
     def __init__(
-        self, dates: list[datetime], path_list: list[Path], save_dir: Path
+        self, dates: List[datetime], path_list: List[Path], save_dir: Path
     ) -> None:
         self.dates = dates
         self.path_list = path_list
@@ -35,7 +35,7 @@ class OpenpyxlWorker:
     def __save(self, workbook: Workbook, name: Path):
         workbook.save(name)
 
-    def __remove_files(self, saved_paths: list[Path]):
+    def __remove_files(self, saved_paths: List[Path]):
         saved_files = tuple(Path(self.save_dir).glob(f"*{self.xlsx_format}"))
         files_to_remove = [file for file in saved_files if file not in saved_paths]
 

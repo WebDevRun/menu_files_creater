@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import NamedTuple
+from typing import NamedTuple, List
 
 
 class ConvertedDate(NamedTuple):
@@ -9,8 +9,8 @@ class ConvertedDate(NamedTuple):
 
 
 class DateInfo(NamedTuple):
-    dates: list[datetime]
-    date_indexes: list[int]
+    dates: List[datetime]
+    date_indexes: List[int]
 
 
 class DateGenerator:
@@ -42,7 +42,7 @@ class DateGenerator:
         return day_number
 
     def __get_day_indexes_by_dates(
-        self, dates: list[datetime], week_numbers: list[int]
+        self, dates: List[datetime], week_numbers: List[int]
     ):
         return [
             self.__get_day_index_by_date(day, week_numbers[index])
